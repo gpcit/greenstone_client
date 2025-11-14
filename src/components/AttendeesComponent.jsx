@@ -16,7 +16,7 @@ const attendeeTableHead = [
 const Text = "text-md text-left font-semibold whitespace-nowrap px-5 py-3";
 
 const AttendeesComponent = () => {
-  const { fetchGuestAttendees, attendees } = useGuestAttendeeStore();
+  const { fetchGuestAttendees, attendees, deleteAllAttendees } = useGuestAttendeeStore();
   const { fetchGuests } = useGuestListStore();
   const audioRef = useRef(null);
   const router = useNavigate();
@@ -65,7 +65,12 @@ const AttendeesComponent = () => {
     </>
   );
 
-
+  const handleDeleteAll = async () => {
+    if (window.confirm("Are you sure you want to delete all attendees?")) {
+      await deleteAllAttendees();
+      toast.success("All attendees have been deleted.", { autoClose: 2000 });
+    }
+  };
 
   const balintawakAttendees = attendees.filter(a => a.group === "Balintawak-Office");
   const balintawakChunks = chunkArray(balintawakAttendees, 11);
@@ -73,13 +78,19 @@ const AttendeesComponent = () => {
   const sqAttendees = attendees.filter(a => a.group === "SQ-Office");
   const sqChunks = chunkArray(sqAttendees, 11);
 
+  const otherAttendees = attendees.filter(a => a.group === "Others");
+  const otherChunks = chunkArray(otherAttendees, 11);
+
 
   return (
     <Layout>
       <div className='container-fluid mx-auto flex flex-col p-5 lg:p-10'>
-        <div >
+        <div className='flex justify-between items-center mb-5'>
           <button onClick={() => handleNavigate("/qr-scan")} className='bg-green-600 transitions border hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-5 shadow-lg'>
             Scan QR Code
+          </button>
+          <button onClick={handleDeleteAll} className='bg-red-600 transitions border hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-5 shadow-lg'>
+            Delete All Data
           </button>
         </div>
         {/* BALINTAWAK OFFICE */}
@@ -172,6 +183,33 @@ const AttendeesComponent = () => {
               </div>
             )}
           </div> */}
+        </div>
+        {/* OTHERS */}
+        <div className='grid grid-cols-10 gap-4 mb-5'>
+          <div className='col-span-10 border rounded-sm border-black shadow-md'>
+            <h1 className='text-xl font-bold text-center p-2'>Others</h1>
+            <hr className='border-black' />
+            <>
+                {otherChunks.length > 0 ? (
+                  <div className='grid grid-cols-8 gap-2'>
+                    {otherChunks.map((chunk, idx) => (
+                      <div className="flex col-span-4 md:col-span-4 lg:col-span-2 mt-1 gap-4 overflow-x-auto">
+                        <Table
+                          key={idx}
+                          tableHead={attendeeTableHead}
+                          data={chunk}
+                          rowRender={rowRenderer}
+                        />
+                      </div>
+                    ))}
+                  </div>
+                ) : (
+                  <div className='flex justify-center items-center h-48'>
+                    <h1 className='text-2xl font-bold text-center'>No Employee has arrived yet.</h1>
+                  </div>
+                )}
+              </>
+          </div>
         </div>
 
       </div>

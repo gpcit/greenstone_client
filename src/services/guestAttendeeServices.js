@@ -11,3 +11,8 @@ export const addAttendee = async (attendeeData) => {
   const response = await axios.post(`${backendUrl}/api/v1/attendees`, attendeeData);
   return response.data;
 }
+
+export const deleteAllAttendees = async () => {
+  const response = await axios.delete(`${backendUrl}/api/v1/attendees/delete`);
+  return response.data;
+}

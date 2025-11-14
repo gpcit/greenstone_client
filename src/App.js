@@ -10,6 +10,10 @@ import Toastify from './components/ToastComponent';
 import RafflePage from './page/RafflePage';
 import FirstRaffle from './page/FirstRaffle';
 import FirstRaffleQRScanner from './components/FirstRaffleQRScannerComponent';
+import SecondRaffle from './page/SecondRaffle';
+import ThirdRaffle from './page/ThirdRaffle';
+import SecondRaffleQRScanner from './components/SecondRaffleQRScannerComponent';
+import ThirdRaffleQRScanner from './components/ThirdRaffleQRScannerComponent';
 
 function App() {
   return (
@@ -22,10 +26,12 @@ function App() {
       <Route path="/attendees" element={<AttendeePage />} />
       <Route path="/qr-scan" element={<QrScanner />} />
       <Route path="/raffle/1st/qr-scan" element={<FirstRaffleQRScanner />} />
+      <Route path="/raffle/2nd/qr-scan" element={<SecondRaffleQRScanner />} />
+      <Route path="/raffle/3rd/qr-scan" element={<ThirdRaffleQRScanner />} />
       <Route path="/raffle" element={<RafflePage />} />
       <Route path="/raffle/1st" element={<FirstRaffle />} />
-      <Route path="/raffle/2nd" element={<FirstRaffle />} />
-      <Route path="/raffle/3rd" element={<FirstRaffle />} />
+      <Route path="/raffle/2nd" element={<SecondRaffle />} />
+      <Route path="/raffle/3rd" element={<ThirdRaffle/>} />
     </Routes>
     </>
   );
