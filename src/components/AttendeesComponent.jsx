@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import Layout from './ui/Layout';
 import Table from './ui/Table';
 import { useGuestAttendeeStore } from '../store/guestAttendeeStore';
@@ -18,6 +18,7 @@ const Text = "text-md text-left font-semibold whitespace-nowrap px-5 py-3";
 const AttendeesComponent = () => {
   const { fetchGuestAttendees, attendees, deleteAllAttendees } = useGuestAttendeeStore();
   const { fetchGuests } = useGuestListStore();
+  const [isDeleteEnabled, setIsDeleteEnabled] = useState(false);
   const audioRef = useRef(null);
   const router = useNavigate();
 
@@ -28,6 +29,15 @@ const AttendeesComponent = () => {
   useEffect(() => {
     audioRef.current = new Audio("/sounds/preview.mp3");
     return () => (audioRef.current = null);
+  }, []);
+
+  useEffect(() => {
+    const today = new Date();
+    const targetDate = new Date("2025-11-30"); // November 30, 2025
+
+    if (today >= targetDate) {
+      setIsDeleteEnabled(true);
+    }
   }, []);
 
   useEffect(() => {
@@ -89,7 +99,7 @@ const AttendeesComponent = () => {
           <button onClick={() => handleNavigate("/qr-scan")} className='bg-green-600 transitions border hover:bg-green-700 text-white font-bold py-2 px-4 rounded mb-5 shadow-lg'>
             Scan QR Code
           </button>
-          <button onClick={handleDeleteAll} className='bg-red-600 transitions border hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-5 shadow-lg'>
+          <button disabled={!isDeleteEnabled} onClick={handleDeleteAll} className='bg-red-600 transitions border hover:bg-red-700 text-white font-bold py-2 px-4 rounded mb-5 shadow-lg'>
             Delete All Data
           </button>
         </div>
